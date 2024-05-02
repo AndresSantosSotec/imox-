@@ -1,0 +1,79 @@
+
+        /* Estilos personalizados */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #28a745; /* Verde */
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff !important;
+        }
+        .jumbotron {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+        }
+        .animated-text {
+            animation: slideUp 1s ease-in-out;
+        }
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Estilos adicionales */
+        section {
+            padding: 50px 0;
+        }
+        section h2 {
+            margin-bottom: 30px;
+        }
+        section p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .custom-card {
+            width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: slideUp 1s ease-in-out;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .text-center {
+            text-align: center;
+        }
+ 
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .input-container textarea {
+            width: calc(50% - 10px); /* El 10px es el espacio entre los textareas */
+            margin-right: 10px; /* Espacio entre los textareas */
+        }
+        

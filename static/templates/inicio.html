@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imox traductor</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/assets/css/estilos.css">
+    <!-- Custom Dark Mode CSS -->
+    <link rel="stylesheet" href="/static/assets/css/dark-mode.css">
+
+    <style>
+        /* Estilo para el contenedor del historial */
+        .historial-container {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: -300px; /* Oculta inicialmente el historial */
+            width: 300px;
+            background-color: #f8f9fa;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        /* Estilo para el botón de mostrar/ocultar historial */
+        .toggle-historial-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Acerca de</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Iniciar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Botón para mostrar/ocultar historial -->
+    <button class="btn btn-primary toggle-historial-btn" onclick="toggleHistorial()">
+        <i class="fas fa-history"></i> 
+    </button>
+
+    <!-- Sección de Traducción similar al traductor de Google -->
+    <section id="translation" class="bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card p-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-white border-right-0"
+                                    id="inputGroup-sizing-default">Español</span>
+                            </div>
+                            <textarea id="textoEspañol" class="form-control border-left-0" rows="4"
+                                placeholder="Ingresa un texto en español"></textarea>
+                            <button class="btn btn-secondary" onclick="reproducirAudio('español')">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-white border-right-0"
+                                    id="inputGroup-sizing-default">Q'eqchi'</span>
+                            </div>
+                            <textarea id="textoQeqchi" class="form-control border-left-0" rows="4"
+                                placeholder="Traducción en q'eqchi'"></textarea>
+                            <button class="btn btn-secondary" onclick="reproducirAudio('qeqchi')">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary" onclick="traducirEspañolAQuechí()">Traducir Español a
+                                Q'eqchi'</button>
+                            <button class="btn btn-primary mx-2" onclick="cambiarIdioma()"><i
+                                    class="fas fa-exchange-alt"></i></button>
+                            <button class="btn btn-primary" onclick="traducirQuechíAEspañol()">Traducir Q'eqchi' a
+                                Español</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenedor del historial de traducciones -->
+    <div id="historialContainer" class="historial-container">
+        <!-- Contenido del historial de traducciones aquí -->
+    </div>
+
+    <!-- Bootstrap JS (opcional, solo si necesitas funcionalidades de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+    <script>
+        // Función para mostrar u ocultar el historial de traducciones
+        function toggleHistorial() {
+            const historialContainer = document.getElementById("historialContainer");
+            historialContainer.style.left = historialContainer.style.left === "0px" ? "-300px" : "0px";
+        }
+
+        let españolActivo = true;
+
+        function expandTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight + 10) + 'px';
+        }
+
+        function cambiarIdioma() {
+            const inputEspañol = document.getElementById("textoEspañol");
+            const inputQeqchi = document.getElementById("textoQeqchi");
+
+            españolActivo = !españolActivo;
+
+            if (españolActivo) {
+                inputEspañol.placeholder = "Ingresa un texto en español";
+                inputQeqchi.placeholder = "Traducción en q'eqchi'";
+                document.querySelector('.input-group-prepend span').textContent = 'Español';
+            } else {
+                inputEspañol.placeholder = "Traducción en español";
+                inputQeqchi.placeholder = "Ingresa un texto en q'eqchi'";
+                document.querySelector('.input-group-prepend span').textContent = "Q'eqchi'";
+            }
+
+            inputEspañol.value = "";
+            inputQeqchi.value = "";
+        }
+
+        // Función para reproducir audio
+        function reproducirAudio(idioma) {
+            // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
+            alert("Reproduciendo audio en " + idioma);
+        }
+
+        // Script para cambiar el modo claro a oscuro
+        const darkModeToggle = document.getElementById("dark-mode-toggle");
+        const body = document.body;
+
+        darkModeToggle.addEventListener("change", function () {
+            if (this.checked) {
+                body.classList.add("dark-mode");
+            } else {
+                body.classList.remove("dark-mode");
+            }
+        });
+    </script>
+
+</body>
+
+</html>
