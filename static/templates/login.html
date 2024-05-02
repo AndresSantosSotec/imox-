@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login y Register - MagtimusPro</title>
+    <title>Login y Register</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/assets/css/login.css">
 
-
-    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <style>
+       
+    </style>
 </head>
 <body>
 
@@ -38,19 +40,19 @@
             </form>
 
             <!--Register-->
-            <form action="" class="formulario__register">
+            <form action="/registro" class="formulario__register" method="POST">
                 <h2>Regístrarse</h2>
-                <input type="text" placeholder="Nombre completo">
-                <input type="text" placeholder="Correo Electronico">
-                <input type="text" placeholder="Usuario">
-                <input type="password" placeholder="Contraseña">
-                <button>Regístrarse</button>
+                <input type="text" placeholder="Nombre completo" name="nombre">
+                <input type="text" placeholder="Correo Electronico" name="correo">
+                <input type="text" placeholder="Usuario" name="usuario">
+                <input type="password" placeholder="Contraseña" name="contrasena">
+                <button type="submit">Regístrarse</button>
             </form>
         </div>
     </div>
 </main>
 
 <!-- Enlace al archivo JavaScript -->
-<script src="../assets/js/script.js"></script>
+<script src="/static/assets/js/script.js"></script>
 </body>
 </html>

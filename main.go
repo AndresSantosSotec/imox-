@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
+	"regexp"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -17,6 +19,11 @@ func main() {
 	// Manejador para la página de inicio (index.html)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/static/templates/index.html", http.StatusFound)
+	})
+
+	// Manejador para la página de inicio de sesión (login.html)
+	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join("static", "templates", "login.html"))
 	})
 
 	// Manejador para la página de traducción
@@ -68,9 +75,105 @@ func main() {
 		}
 	})
 
+	// Manejador para la página de registro
+	http.HandleFunc("/registro", handleRegistro)
+
 	// Mensaje de inicio
 	fmt.Println("El servidor está corriendo en http://localhost:8080/")
 
 	// Inicia el servidor en el puerto 8080
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+// Función para manejar el registro de usuarios
+
+func handleRegistro(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Parsear los datos del formulario
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Error al parsear la solicitud", http.StatusBadRequest)
+		return
+	}
+
+	// Obtener los datos del formulario
+	nombre := r.FormValue("nombre")
+	correo := r.FormValue("correo")
+	usuario := r.FormValue("usuario")
+	contrasena := r.FormValue("contrasena")
+
+	// Validar los campos del formulario
+	if nombre == "" || correo == "" || usuario == "" || contrasena == "" {
+		http.Error(w, "Todos los campos son requeridos", http.StatusBadRequest)
+		return
+	}
+
+	// Validar el formato del correo electrónico
+	if !validarFormatoCorreo(correo) {
+		http.Error(w, "Formato de correo electrónico inválido", http.StatusBadRequest)
+		return
+	}
+
+	// Realizar la conexión a la base de datos
+	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/imox_bd")
+	if err != nil {
+		http.Error(w, "Error de conexión a la base de datos", http.StatusInternalServerError)
+		log.Println("Error de conexión a la base de datos:", err)
+		return
+	}
+	defer db.Close()
+
+	// Verificar si el correo electrónico ya está en uso
+	var correoExistente bool
+	err = db.QueryRow("SELECT EXISTS (SELECT 1 FROM usuarios WHERE correo_electronico = ?)", correo).Scan(&correoExistente)
+	if err != nil {
+		http.Error(w, "Error al verificar el correo electrónico", http.StatusInternalServerError)
+		log.Println("Error al verificar el correo electrónico:", err)
+		return
+	}
+	if correoExistente {
+		// Mostrar un mensaje de alerta en JavaScript y redirigir al usuario al index
+		fmt.Fprintf(w, "<script>alert('El correo electrónico ya está en uso'); window.location.href = '/';</script>")
+		return
+	}
+
+	// Verificar si el nombre de usuario ya está en uso
+	var usuarioExistente bool
+	err = db.QueryRow("SELECT EXISTS (SELECT 1 FROM usuarios WHERE usuario = ?)", usuario).Scan(&usuarioExistente)
+	if err != nil {
+		http.Error(w, "Error al verificar el nombre de usuario", http.StatusInternalServerError)
+		log.Println("Error al verificar el nombre de usuario:", err)
+		return
+	}
+	if usuarioExistente {
+		// Mostrar un mensaje de alerta en JavaScript y redirigir al usuario al index
+		fmt.Fprintf(w, "<script>alert('El nombre de usuario ya está en uso'); window.location.href = '/';</script>")
+		return
+	}
+
+	// Insertar el nuevo usuario en la base de datos
+	_, err = db.Exec("INSERT INTO usuarios (nombre_completo, correo_electronico, usuario, contrasena) VALUES (?, ?, ?, ?)", nombre, correo, usuario, contrasena)
+	if err != nil {
+		http.Error(w, "Error al registrar el usuario", http.StatusInternalServerError)
+		log.Println("Error al registrar el usuario:", err)
+		return
+	}
+
+	// Respuesta de éxito
+	w.WriteHeader(http.StatusOK)
+	// Mostrar un mensaje de alerta
+	fmt.Fprintf(w, "<script>alert('Usuario registrado exitosamente'); window.location.href = '/';</script>")
+}
+
+// Función para validar el formato del correo electrónico
+func validarFormatoCorreo(correo string) bool {
+	// Patrón para validar el formato del correo electrónico
+	patron := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+	// Compilar el patrón en una expresión regular
+	expReg := regexp.MustCompile(patron)
+	// Verificar si el correo cumple con el formato esperado
+	return expReg.MatchString(correo)
 }

@@ -1,5 +1,5 @@
 async function enviarScript() {
-    const message = "teamo";
+    const message = "Hagamos pierna :(";
 
     const main = document.querySelector("#main");
     const textarea = main.querySelector(`div[contenteditable="true"]`);
