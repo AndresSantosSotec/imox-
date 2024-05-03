@@ -59,7 +59,7 @@
                         <a class="nav-link" href="#contact">Contacto</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#contact">Iniciar</a>
+                        <a class="nav-link" href="#contact">Salir</a>
                     </li>
                 </ul>
             </div>
@@ -166,6 +166,48 @@
             alert("Reproduciendo audio en " + idioma);
         }
 
+        // Función para traducir de Español a Q'eqchi'
+        function traducirEspañolAQuechí() {
+            const textoEspañol = document.getElementById("textoEspañol").value;
+
+            // Realizar la solicitud AJAX al servidor
+            fetch('/traducir', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `textoEspañol=${encodeURIComponent(textoEspañol)}`,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("textoQeqchi").value = data.qeqchiText;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Función para traducir de Q'eqchi' a Español
+        function traducirQuechíAEspañol() {
+            const textoQeqchi = document.getElementById("textoQeqchi").value;
+
+            // Realizar la solicitud AJAX al servidor
+            fetch('/traducir', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `textoEspañol=${encodeURIComponent(textoQeqchi)}`,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("textoEspañol").value = data.qeqchiText;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
         // Script para cambiar el modo claro a oscuro
         const darkModeToggle = document.getElementById("dark-mode-toggle");
         const body = document.body;
@@ -177,6 +219,7 @@
                 body.classList.remove("dark-mode");
             }
         });
+
     </script>
 
 </body>
