@@ -63,7 +63,7 @@ func main() {
 		}
 
 		// Si las credenciales son válidas, redirigir al usuario a la página de inicio
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/static/templates/inicio.html", http.StatusFound)
 	})
 
 	// Manejador para la página de traducción
