@@ -23,7 +23,47 @@ func main() {
 
 	// Manejador para la página de inicio de sesión (login.html)
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filepath.Join("static", "templates", "login.html"))
+		if r.Method != http.MethodPost {
+			http.ServeFile(w, r, filepath.Join("static", "templates", "login.html"))
+			return
+		}
+
+		// Parsear los datos del formulario
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "Error al parsear la solicitud", http.StatusBadRequest)
+			return
+		}
+
+		// Obtener las credenciales del formulario
+		usuario := r.FormValue("usuario")
+		contrasena := r.FormValue("contrasena")
+
+		// Realizar la consulta a la base de datos para verificar las credenciales
+		db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/imox_bd")
+		if err != nil {
+			http.Error(w, "Error de conexión a la base de datos", http.StatusInternalServerError)
+			log.Println("Error de conexión a la base de datos:", err)
+			return
+		}
+		defer db.Close()
+
+		var id int
+		err = db.QueryRow("SELECT id FROM usuarios WHERE usuario = ? AND contrasena = ?", usuario, contrasena).Scan(&id)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				// Usuario o contraseña incorrectos, redirigir al usuario de vuelta al formulario de inicio de sesión con un mensaje de error
+				http.ServeFile(w, r, filepath.Join("static", "templates", "login.html"))
+				fmt.Fprintf(w, "<script>alert('Usuario o contraseña incorrectos');</script>")
+				return
+			}
+			// Error al consultar la base de datos
+			http.Error(w, "Error al verificar las credenciales", http.StatusInternalServerError)
+			log.Println("Error al verificar las credenciales:", err)
+			return
+		}
+
+		// Si las credenciales son válidas, redirigir al usuario a la página de inicio
+		http.Redirect(w, r, "/", http.StatusFound)
 	})
 
 	// Manejador para la página de traducción
@@ -86,7 +126,6 @@ func main() {
 }
 
 // Función para manejar el registro de usuarios
-
 func handleRegistro(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)
