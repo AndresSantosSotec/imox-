@@ -21,6 +21,8 @@ func main() {
 		http.Redirect(w, r, "/static/templates/index.html", http.StatusFound)
 	})
 
+	/////////////////////////////////////////////////////////////////////////////////////////////
+     id =10;
 	// Manejador para la página de inicio de sesión (login.html)
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -65,6 +67,9 @@ func main() {
 		// Si las credenciales son válidas, redirigir al usuario a la página de inicio
 		http.Redirect(w, r, "/static/templates/inicio.html", http.StatusFound)
 	})
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Manejador para la página de traducción
 	http.HandleFunc("/traducir", func(w http.ResponseWriter, r *http.Request) {
@@ -115,6 +120,8 @@ func main() {
 		}
 	})
 
+	///////////////////////////////////////////////////////////////////////////////////////////
+
 	// Manejador para la página de registro
 	http.HandleFunc("/registro", handleRegistro)
 
@@ -124,6 +131,8 @@ func main() {
 	// Inicia el servidor en el puerto 8080
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
+
 
 // Función para manejar el registro de usuarios
 func handleRegistro(w http.ResponseWriter, r *http.Request) {

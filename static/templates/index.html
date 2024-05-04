@@ -150,6 +150,9 @@
             alert("Reproduciendo audio en " + idioma);
         }
 
+       
+
+
         // Función para traducir de Español a Q'eqchi'
         function traducirEspañolAQuechí() {
             const textoEspañol = document.getElementById("textoEspañol").value;
@@ -161,6 +164,7 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: `textoEspañol=${encodeURIComponent(textoEspañol)}`,
+                        
             })
                 .then(response => response.json())
                 .then(data => {
