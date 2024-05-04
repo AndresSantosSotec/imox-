@@ -22,7 +22,7 @@ func main() {
 	})
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
-     id =10;
+     
 	// Manejador para la página de inicio de sesión (login.html)
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
