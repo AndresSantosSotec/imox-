@@ -64,7 +64,7 @@
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white border-right-0"
-                                    id="inputGroup-sizing-default">Q'eqchi'</span>
+                                    id="inputGroup-sizing-default-2">Q'eqchi'</span>
                             </div>
                             <textarea id="textoQeqchi" class="form-control border-left-0" rows="4"
                                 placeholder="Traducción en q'eqchi'"></textarea>
@@ -133,11 +133,13 @@
             if (españolActivo) {
                 inputEspañol.placeholder = "Ingresa un texto en español";
                 inputQeqchi.placeholder = "Traducción en q'eqchi'";
-                document.querySelector('.input-group-prepend span').textContent = 'Español';
+                document.getElementById('inputGroup-sizing-default').textContent = 'Español';
+                document.getElementById('inputGroup-sizing-default-2').textContent = "Q'eqchi'";
             } else {
-                inputEspañol.placeholder = "Traducción en español";
-                inputQeqchi.placeholder = "Ingresa un texto en q'eqchi'";
-                document.querySelector('.input-group-prepend span').textContent = "Q'eqchi'";
+                inputEspañol.placeholder = "Ingresa un texto en q'eqchi'";
+                inputQeqchi.placeholder = "Traducción en español";
+                document.getElementById('inputGroup-sizing-default-2').textContent = "Español'";
+                document.getElementById('inputGroup-sizing-default').textContent = "Q'eqchi'";
             }
 
             inputEspañol.value = "";
