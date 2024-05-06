@@ -16,6 +16,11 @@ func main() {
 	// Manejador para servir archivos estáticos desde la carpeta "static"
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
+	// Manejador para la página de carga (cargar.html)
+	http.HandleFunc("/cargar_palabras.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join("static", "templates", "cargar_palabras.html"))
+	})
+
 	// Manejador para la página de inicio (index.html)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/static/templates/index.html", http.StatusFound)
@@ -23,6 +28,15 @@ func main() {
 
 	// Manejador para la página de inicio de sesión (login.html)
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		// Definir la variable db
+		db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/imox_bd")
+		if err != nil {
+			http.Error(w, "Error de conexión a la base de datos", http.StatusInternalServerError)
+			log.Println("Error de conexión a la base de datos:", err)
+			return
+		}
+		defer db.Close()
+
 		if r.Method != http.MethodPost {
 			http.ServeFile(w, r, filepath.Join("static", "templates", "login.html"))
 			return
@@ -38,20 +52,12 @@ func main() {
 		usuario := r.FormValue("usuario")
 		contrasena := r.FormValue("contrasena")
 
-		// Realizar la consulta a la base de datos para verificar las credenciales
-		db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/imox_bd")
-		if err != nil {
-			http.Error(w, "Error de conexión a la base de datos", http.StatusInternalServerError)
-			log.Println("Error de conexión a la base de datos:", err)
-			return
-		}
-		defer db.Close()
-
-		var id int
-		err = db.QueryRow("SELECT id FROM usuarios WHERE usuario = ? AND contrasena = ?", usuario, contrasena).Scan(&id)
+		// Realizar la consulta a la base de datos para verificar las credenciales y obtener el id_tipo
+		var id, idTipo int
+		err = db.QueryRow("SELECT id, id_tipo FROM usuarios WHERE usuario = ? AND contrasena = ?", usuario, contrasena).Scan(&id, &idTipo)
 		if err != nil {
 			if err == sql.ErrNoRows {
-				// Usuario o contraseña incorrectos, redirigir al usuario de vuelta al formulario de inicio de sesión con un mensaje de error
+				// Usuario o contraseña incorrectos
 				http.ServeFile(w, r, filepath.Join("static", "templates", "login.html"))
 				fmt.Fprintf(w, "<script>alert('Usuario o contraseña incorrectos');</script>")
 				return
@@ -62,8 +68,12 @@ func main() {
 			return
 		}
 
-		// Si las credenciales son válidas, redirigir al usuario a la página de inicio
-		http.Redirect(w, r, "/static/templates/inicio.html", http.StatusFound)
+		// Redirigir al usuario según su rol
+		if idTipo == 1 { // Si es admin
+			http.Redirect(w, r, "/static/templates/inicio_admin.html", http.StatusFound)
+		} else { // Para otros roles, supongo que "usuario" es el valor predeterminado
+			http.Redirect(w, r, "/static/templates/inicio.html", http.StatusFound)
+		}
 	})
 
 	// Manejador para la página de traducción
@@ -118,6 +128,9 @@ func main() {
 	// Manejador para la página de registro
 	http.HandleFunc("/registro", handleRegistro)
 
+	// Manejador para obtener las traducciones desde la base de datos
+	http.HandleFunc("/obtener-traducciones", obtenerTraducciones)
+
 	// Mensaje de inicio
 	fmt.Println("El servidor está corriendo en http://localhost:8080/")
 
@@ -125,7 +138,63 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-// Función para manejar el registro de usuarios
+// Función para manejar la solicitud de obtención de traducciones desde la base de datos
+// Manejador para obtener las traducciones desde la base de datos
+func obtenerTraducciones(w http.ResponseWriter, r *http.Request) {
+	// Realizar la consulta a la base de datos para obtener las traducciones
+	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/imox_bd")
+	if err != nil {
+		http.Error(w, "Error de conexión a la base de datos", http.StatusInternalServerError)
+		log.Println("Error de conexión a la base de datos:", err)
+		return
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT id, palabra_esp, palabra_qeqchi, audio_esp, audio_qeqchi FROM traducciones")
+	if err != nil {
+		http.Error(w, "Error al obtener las traducciones", http.StatusInternalServerError)
+		log.Println("Error al obtener las traducciones:", err)
+		return
+	}
+	defer rows.Close()
+
+	// Crear una estructura para almacenar las traducciones
+	type Traduccion struct {
+		ID            int    `json:"id"`
+		PalabraEsp    string `json:"palabra_esp"`
+		PalabraQeqchi string `json:"palabra_qeqchi"`
+		AudioEsp      string `json:"audio_esp"`
+		AudioQeqchi   string `json:"audio_qeqchi"`
+	}
+	var traducciones []Traduccion
+
+	// Iterar sobre los resultados y almacenarlos en la estructura de datos
+	for rows.Next() {
+		var t Traduccion
+		err := rows.Scan(&t.ID, &t.PalabraEsp, &t.PalabraQeqchi, &t.AudioEsp, &t.AudioQeqchi)
+		if err != nil {
+			http.Error(w, "Error al escanear las traducciones", http.StatusInternalServerError)
+			log.Println("Error al escanear las traducciones:", err)
+			return
+		}
+		traducciones = append(traducciones, t)
+	}
+	if err := rows.Err(); err != nil {
+		http.Error(w, "Error al iterar sobre las traducciones", http.StatusInternalServerError)
+		log.Println("Error al iterar sobre las traducciones:", err)
+		return
+	}
+
+	// Convertir las traducciones a JSON y enviarlas como respuesta
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(traducciones); err != nil {
+		http.Error(w, "Error al codificar las traducciones como JSON", http.StatusInternalServerError)
+		log.Println("Error al codificar las traducciones como JSON:", err)
+		return
+	}
+}
+
+// Manehadoir de registros
 func handleRegistro(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)

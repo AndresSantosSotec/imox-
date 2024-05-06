@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- Agrega tus estilos CSS personalizados -->
+    <link rel="stylesheet" href="/static/assets/css/admin.css">
+    <link rel="stylesheet" href="/static/assets/css/side.css">
+</head>
+
+<body>
+    <!-- Dashboard -->
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>Imox Admin</h2>
+            <button class="btn toggle-button" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="/cargar_palabras.html">
+                        <i class="far fa-calendar"></i> Traducciones 
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/agregar-traduccion">
+                        <i class="fas fa-user"></i> Usuarios 
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/ver-usuarios">
+                        <i class="fas fa-sign-out-alt"></i> Salir  
+                    </a>
+                </li>
+                <!-- Agrega más elementos de menú aquí -->
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="card crdbody">
+                <div class="card-body">
+                    <h5 class="card-title">Lista de Traducciones</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Palabra en Español</th>
+                                <th>Palabra en Q'eqchi'</th>
+                                <th>Audio en Español</th>
+                                <th>Audio en Q'eqchi'</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="traducciones-table-body">
+                            <!-- Aquí se cargarán las filas de la tabla dinámicamente -->
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarModal">Agregar Traducción</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar nueva traducción -->
+    <div class="modal fade" id="agregarModal" tabindex="-1" aria-labelledby="agregarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agregarModalLabel">Agregar Traducción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="agregarForm">
+                        <div class="mb-3">
+                            <label for="palabra_esp" class="form-label">Palabra en Español</label>
+                            <input type="text" class="form-control" id="palabra_esp" name="palabra_esp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="palabra_qeqchi" class="form-label">Palabra en Q'eqchi'</label>
+                            <input type="text" class="form-control" id="palabra_qeqchi" name="palabra_qeqchi">
+                        </div>
+                        <div class="mb-3">
+                            <label for="audio_esp" class="form-label">Audio en Español</label>
+                            <input type="text" class="form-control" id="audio_esp" name="audio_esp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="audio_qeqchi" class="form-label">Audio en Q'eqchi'</label>
+                            <input type="text" class="form-control" id="audio_qeqchi" name="audio_qeqchi">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarTraduccion()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enlace a Bootstrap JS y jQuery (necesarios para el funcionamiento de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Enlace a FontAwesome para los iconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/static/assets/js/side.js"></script>
+
+    <script>
+        function agregarTraduccion() {
+            var palabra_esp = document.getElementById("palabra_esp").value;
+            var palabra_qeqchi = document.getElementById("palabra_qeqchi").value;
+            var audio_esp = document.getElementById("audio_esp").value;
+            var audio_qeqchi = document.getElementById("audio_qeqchi").value;
+
+            // Aquí puedes enviar los datos al servidor utilizando AJAX o Fetch
+            // Por ejemplo, utilizando Fetch:
+            fetch('/ruta/del/servidor', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    palabra_esp: palabra_esp,
+                    palabra_qeqchi: palabra_qeqchi,
+                    audio_esp: audio_esp,
+                    audio_qeqchi: audio_qeqchi
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Aquí puedes manejar la respuesta del servidor
+                console.log(data);
+                // Por ejemplo, cerrar el modal después de guardar los datos
+                $('#agregarModal').modal('hide');
+                // Y luego recargar la tabla de traducciones o hacer cualquier otra acción necesaria
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Función para cargar las traducciones en la tabla
+        function cargarTraducciones() {
+            fetch('/obtener-traducciones')
+            .then(response => response.json())
+            .then(data => {
+                // Limpiar el contenido actual de la tabla
+                document.getElementById('traducciones-table-body').innerHTML = '';
+
+                // Iterar sobre las traducciones y agregarlas a la tabla
+                data.forEach(traduccion => {
+                    const row = `
+                        <tr>
+                            <td>${traduccion.ID}</td>
+                            <td>${traduccion.PalabraEsp}</td>
+                            <td>${traduccion.PalabraQeqchi}</td>
+                            <td>${traduccion.AudioEsp}</td>
+                            <td>${traduccion.AudioQeqchi}</td>
+                            <td>Acciones</td> 
+                        </tr>
+                    `;
+                    document.getElementById('traducciones-table-body').innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Llamar a la función para cargar las traducciones al cargar la página
+        window.onload = cargarTraducciones;
+    </script>
+</body>
+
+</html>
