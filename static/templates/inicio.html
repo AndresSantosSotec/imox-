@@ -3,16 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imox traductor</title>
-    <!-- Bootstrap CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/imox-/static/assets/css/estilos.css">
+    <!-- Estilos específicos del segundo código -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/assets/css/estilos.css">
-    <!-- Custom Dark Mode CSS -->
-    <link rel="stylesheet" href="/static/assets/css/dark-mode.css">
+   
+
+    <title>Portfolio</title>
 
     <style>
         /* Estilo para el contenedor del historial */
@@ -39,177 +39,76 @@
 </head>
 
 <body>
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">Acerca de</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#services">Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contacto</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Salir</a>
-                    </li>
-                </ul>
+    <!-- Header del primer código -->
+    <header class="container">
+        <div class="page-header">
+            <div class="logo">
             </div>
+            <input type="checkbox" id="click">
+            <label for="click" class="mainicon">
+                <div class="menu">
+                    <i class='bx bx-menu'></i>
+                </div>
+            </label>
+            <ul>
+                <li><a href="#" class="active" style="--navAni:1">Home</a></li>
+                <li><a href="#" style="--navAni:2">acerca de</a></li>
+                <li><a href="#" style="--navAni:3">Servicios</a></li>
+                <li><a href="#" style="--navAni:4">Contacto</a></li>
+                <li><a href="#" style="--navAni:5">iniciar</a></li>
+            </ul>
+            <label class="mode">
+                <input type="checkbox" id="darkModeToggle">
+                <i class='bx bxs-moon'></i>
+            </label>
         </div>
-    </nav>
+    </header>
 
-    <!-- Botón para mostrar/ocultar historial -->
-    <button class="btn btn-primary toggle-historial-btn" onclick="toggleHistorial()">
-        <i class="fas fa-history"></i> 
-    </button>
-
-    <!-- Sección de Traducción similar al traductor de Google -->
-    <section id="translation" class="bg-light">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card p-3">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white border-right-0"
-                                    id="inputGroup-sizing-default">Español</span>
-                            </div>
-                            <textarea id="textoEspañol" class="form-control border-left-0" rows="4"
-                                placeholder="Ingresa un texto en español"></textarea>
-                            <button class="btn btn-secondary" onclick="reproducirAudio('español')">
-                                <i class="fas fa-volume-up"></i>
-                            </button>
+    <!-- Contenedor principal -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card p-3">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white border-right-0" id="inputGroup-sizing-default">Español</span>
                         </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white border-right-0"
-                                    id="inputGroup-sizing-default">Q'eqchi'</span>
-                            </div>
-                            <textarea id="textoQeqchi" class="form-control border-left-0" rows="4"
-                                placeholder="Traducción en q'eqchi'"></textarea>
-                            <button class="btn btn-secondary" onclick="reproducirAudio('qeqchi')">
-                                <i class="fas fa-volume-up"></i>
-                            </button>
+                        <textarea id="textoEspañol" class="form-control border-left-0" rows="4" placeholder="Ingresa un texto en español"></textarea>
+                        <button class="btn btn-secondary" onclick="reproducirAudio('español')">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white border-right-0" id="inputGroup-sizing-default">Q'eqchi'</span>
                         </div>
-                        <div class="text-center">
-                            <button class="btn btn-primary" onclick="traducirEspañolAQuechí()">Traducir Español a
-                                Q'eqchi'</button>
-                            <button class="btn btn-primary mx-2" onclick="cambiarIdioma()"><i
-                                    class="fas fa-exchange-alt"></i></button>
-                            <button class="btn btn-primary" onclick="traducirQuechíAEspañol()">Traducir Q'eqchi' a
-                                Español</button>
-                        </div>
+                        <textarea id="textoQeqchi" class="form-control border-left-0" rows="4" placeholder="Traducción en q'eqchi'"></textarea>
+                        <button class="btn btn-secondary" onclick="reproducirAudio('qeqchi')">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" onclick="traducirEspañolAQuechí()">Traducir Español a
+                            Q'eqchi'</button>
+                        <button class="btn btn-primary mx-2" onclick="cambiarIdioma()"><i
+                                class="fas fa-exchange-alt"></i></button>
+                        <button class="btn btn-primary" onclick="traducirQuechíAEspañol()">Traducir Q'eqchi' a
+                            Español</button>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Contenedor del historial de traducciones -->
-    <div id="historialContainer" class="historial-container">
-        <!-- Contenido del historial de traducciones aquí -->
     </div>
 
-    <!-- Bootstrap JS (opcional, solo si necesitas funcionalidades de Bootstrap) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Botón para mostrar/ocultar historial -->
+    <button class="btn btn-primary toggle-historial-btn" onclick="toggleHistorial()">
+        <i class="fas fa-history"></i>
+    </button>
 
-    <!-- Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 
+    <!-- Script para cambiar el modo oscuro -->
     <script>
-        // Función para mostrar u ocultar el historial de traducciones
-        function toggleHistorial() {
-            const historialContainer = document.getElementById("historialContainer");
-            historialContainer.style.left = historialContainer.style.left === "0px" ? "-300px" : "0px";
-        }
-
-        let españolActivo = true;
-
-        function expandTextarea(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight + 10) + 'px';
-        }
-
-        function cambiarIdioma() {
-            const inputEspañol = document.getElementById("textoEspañol");
-            const inputQeqchi = document.getElementById("textoQeqchi");
-
-            españolActivo = !españolActivo;
-
-            if (españolActivo) {
-                inputEspañol.placeholder = "Ingresa un texto en español";
-                inputQeqchi.placeholder = "Traducción en q'eqchi'";
-                document.querySelector('.input-group-prepend span').textContent = 'Español';
-            } else {
-                inputEspañol.placeholder = "Traducción en español";
-                inputQeqchi.placeholder = "Ingresa un texto en q'eqchi'";
-                document.querySelector('.input-group-prepend span').textContent = "Q'eqchi'";
-            }
-
-            inputEspañol.value = "";
-            inputQeqchi.value = "";
-        }
-
-        // Función para reproducir audio
-        function reproducirAudio(idioma) {
-            // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
-            alert("Reproduciendo audio en " + idioma);
-        }
-
-        // Función para traducir de Español a Q'eqchi'
-        function traducirEspañolAQuechí() {
-            const textoEspañol = document.getElementById("textoEspañol").value;
-
-            // Realizar la solicitud AJAX al servidor
-            fetch('/traducir', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `textoEspañol=${encodeURIComponent(textoEspañol)}`,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("textoQeqchi").value = data.qeqchiText;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        // Función para traducir de Q'eqchi' a Español
-        function traducirQuechíAEspañol() {
-            const textoQeqchi = document.getElementById("textoQeqchi").value;
-
-            // Realizar la solicitud AJAX al servidor
-            fetch('/traducir', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `textoEspañol=${encodeURIComponent(textoQeqchi)}`,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("textoEspañol").value = data.qeqchiText;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        // Script para cambiar el modo claro a oscuro
-        const darkModeToggle = document.getElementById("dark-mode-toggle");
+        const darkModeToggle = document.getElementById("darkModeToggle");
         const body = document.body;
 
         darkModeToggle.addEventListener("change", function () {
@@ -220,8 +119,12 @@
             }
         });
 
+        // Función para mostrar/ocultar el historial
+        function toggleHistorial() {
+            const historialContainer = document.querySelector('.historial-container');
+            historialContainer.style.left = historialContainer.style.left === '0px' ? '-300px' : '0px';
+        }
     </script>
-
 </body>
 
 </html>
