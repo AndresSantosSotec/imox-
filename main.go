@@ -26,6 +26,8 @@ func main() {
 		http.Redirect(w, r, "/static/templates/index.html", http.StatusFound)
 	})
 
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Manejador para la página de inicio de sesión (login.html)
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		// Definir la variable db
@@ -76,6 +78,8 @@ func main() {
 		}
 	})
 
+	//////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Manejador para la página de traducción
 	http.HandleFunc("/traducir", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -99,8 +103,16 @@ func main() {
 		}
 		defer db.Close()
 
-		var qeqchiText string
-		err = db.QueryRow("SELECT palabra_qeqchi FROM traducciones WHERE palabra_esp = ?", spanishText).Scan(&qeqchiText)
+		var qeqchiText string //Almacena la palabra en qeqchi
+		var audio_es string   //Almacena la ruta del audio en español
+		var audio_qeq string  //Almacena la ruta del audio en qeqchi
+
+		//Consulta para obtener la palabra en qeqchi y la ruta de los audios
+		err = db.QueryRow("SELECT palabra_qeqchi, audio_esp, audio_qeqchi FROM traducciones WHERE palabra_esp = ?", spanishText).Scan(&qeqchiText, &audio_es, &audio_qeq)
+		fmt.Println("palabra traducida:", qeqchiText)
+		fmt.Println("Valor de audio_es:", audio_es)
+		fmt.Println("Valor de audio_qeq:", audio_qeq)
+
 		if err != nil {
 			if err == sql.ErrNoRows {
 				http.Error(w, fmt.Sprintf("No se encontró una traducción para el texto en español: %s", spanishText), http.StatusNotFound)
@@ -114,8 +126,12 @@ func main() {
 		// Enviar la traducción como respuesta
 		response := struct {
 			QeqchiText string `json:"qeqchiText"`
+			AudioES    string `json:"audio_es"`
+			AudioQeq   string `json:"audio_qeq"`
 		}{
 			QeqchiText: qeqchiText,
+			AudioES:    audio_es,
+			AudioQeq:   audio_qeq,
 		}
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(response); err != nil {
@@ -124,6 +140,8 @@ func main() {
 			return
 		}
 	})
+
+	///////////////////////////////////////////////////////////////////////////////////////////
 
 	// Manejador para la página de registro
 	http.HandleFunc("/registro", handleRegistro)
