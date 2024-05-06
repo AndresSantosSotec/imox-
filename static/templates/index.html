@@ -58,7 +58,7 @@
                             <textarea id="textoEspañol" class="form-control border-left-0" rows="4"
                                 placeholder="Ingresa un texto en español"></textarea>
                             <button class="btn btn-secondary" onclick="reproducirAudio('español')">
-                                <i class="fas fa-volume-up"onclick="reproducirAudio('español')"></i>
+                                <i class="fas fa-volume-up"></i>
                             </button>
                         </div>
                         <div class="input-group mb-3">
@@ -79,6 +79,10 @@
                                     class="fas fa-exchange-alt"></i></button>
                             <button class="btn btn-primary" onclick="traducirQuechíAEspañol()">Traducir Q'eqchi' a
                                 Español</button>
+
+                                 <!--Prueba de las rutas de los audios-->
+                                <p id="audioes">Hola español</p>
+                                <p id="audioqe">Hola qeqchi</p>
                         </div>
                     </div>
                 </div>
@@ -100,6 +104,8 @@
         </div>
     </section>
 
+   
+
     <!-- Sección Contacto -->
     <section id="contact">
         <div class="container">
@@ -116,6 +122,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 
     <!-- Custom JavaScript -->
+    <!--
+    <a href="../../audios/espaniol/regla.mp3"></a>
+    <a href="../../audios/qeqchi/juch'leb'.mp3"></a>
+    -->
     <script>
         let españolActivo = true;
 
@@ -147,9 +157,26 @@
         }
 
         // Función para reproducir audio
+
+        
         function reproducirAudio(idioma) {
             // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
-            alert("Reproduciendo audio en " + idioma);
+            let audio_palabraes= document.getElementById("audioes").textContent;
+            let audio_palabraqe= document.getElementById("audioqe").textContent;
+            //Crear instancia de Audio para los dos idiomas
+        
+            let sonido_espaniol = new Audio(audio_palabraes);
+            let sonido_qeqchi = new Audio(audio_palabraqe);
+           
+            
+            if(idioma=="español"){
+                //alert(audio_palabraes)
+                sonido_espaniol.play();
+            }else if(idioma=="qeqchi"){
+                //alert('Audio en qeqchi')
+                sonido_qeqchi.play();
+            }
+            
         }
 
        
@@ -170,7 +197,14 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    //Asignar los valores obtenidos como respuesta de la API (traducción y audios)
                     document.getElementById("textoQeqchi").value = data.qeqchiText;
+                    document.getElementById("audioes").textContent=data.audio_es;
+                    document.getElementById("audioqe").textContent=data.audio_qeq;
+                    //audio_espaniol=data.audio_es;
+                    //audio_qeqchi=data.audio_qeq;
+                    //console.log('Audio en español'+audio_espaniol);
+                    //console.log('Audio en qeqchi'+audio_qeqchi);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -199,6 +233,7 @@
         }
 
         // Script para cambiar el modo claro a oscuro
+        /*
         const darkModeToggle = document.getElementById("dark-mode-toggle");
         const body = document.body;
 
@@ -209,7 +244,7 @@
                 body.classList.remove("dark-mode");
             }
         });
-
+        */
     </script>
 
 </body>
