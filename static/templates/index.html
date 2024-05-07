@@ -13,36 +13,58 @@
     <link rel="stylesheet" href="/static/assets/css/estilos.css">
     <!-- Custom Dark Mode CSS -->
     <link rel="stylesheet" href="/static/assets/css/dark-mode.css">
+    <!-- Boxicons CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+    <style>
+        /* Estilo para el contenedor del historial */
+        .historial-container {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: -300px; /* Oculta inicialmente el historial */
+            width: 300px;
+            background-color: #f8f9fa;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        /* Estilo para el botón de mostrar/ocultar historial */
+        .toggle-historial-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">Acerca de</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#services">Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="cargar.html">Contacto</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.html">Iniciar</a>
-                    </li>
-                </ul>
+    <!-- Header del primer código -->
+    <header class="container">
+        <div class="page-header">
+            <div class="logo">
             </div>
+            <input type="checkbox" id="click">
+            <label for="click" class="mainicon">
+                <div class="menu">
+                    <i class='bx bx-menu'></i>
+                </div>
+            </label>
+            <ul>
+                <li><a href="#" class="active" style="--navAni:1">Home</a></li>
+                <li><a href="#" style="--navAni:2">acerca de</a></li>
+                <li><a href="" style="--navAni:3">Servicios</a></li>
+                <li><a href="cargar_palabras.html" style="--navAni:4">Contacto</a></li>
+                <li><a href="login.html" style="--navAni:5">iniciar</a></li>
+            </ul>
+            <label class="mode">
+                <input type="checkbox" id="darkModeToggle">
+                <i class='bx bxs-moon'></i>
+            </label>
         </div>
-    </nav>
+    </header>
 
     <!-- Sección de Traducción similar al traductor de Google -->
     <section id="translation" class="bg-light">
@@ -80,9 +102,9 @@
                             <button class="btn btn-primary" onclick="traducirQuechíAEspañol()">Traducir Q'eqchi' a
                                 Español</button>
 
-                                 <!--Prueba de las rutas de los audios-->
-                                <p id="audioes">Hola español</p>
-                                <p id="audioqe">Hola qeqchi</p>
+                            <!--Prueba de las rutas de los audios-->
+                            <p id="audioes">Hola español</p>
+                            <p id="audioqe">Hola qeqchi</p>
                         </div>
                     </div>
                 </div>
@@ -104,14 +126,17 @@
         </div>
     </section>
 
-   
-
     <!-- Sección Contacto -->
     <section id="contact">
         <div class="container">
 
         </div>
     </section>
+
+    <!-- Botón para mostrar/ocultar historial -->
+    <button class="btn btn-primary toggle-historial-btn" onclick="toggleHistorial()">
+        <i class="fas fa-history"></i>
+    </button>
 
     <!-- Bootstrap JS (opcional, solo si necesitas funcionalidades de Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -122,10 +147,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 
     <!-- Custom JavaScript -->
-    <!--
-    <a href="../../audios/espaniol/regla.mp3"></a>
-    <a href="../../audios/qeqchi/juch'leb'.mp3"></a>
-    -->
     <script>
         let españolActivo = true;
 
@@ -157,8 +178,6 @@
         }
 
         // Función para reproducir audio
-
-        
         function reproducirAudio(idioma) {
             // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
             let audio_palabraes= document.getElementById("audioes").textContent;
@@ -170,17 +189,17 @@
            
             
             if(idioma=="español"){
-                //alert(audio_palabraes)
                 sonido_espaniol.play();
             }else if(idioma=="qeqchi"){
-                //alert('Audio en qeqchi')
                 sonido_qeqchi.play();
             }
-            
         }
 
-       
-
+        // Función para mostrar/ocultar el historial
+        function toggleHistorial() {
+            const historialContainer = document.querySelector('.historial-container');
+            historialContainer.style.left = historialContainer.style.left === '0px' ? '-300px' : '0px';
+        }
 
         // Función para traducir de Español a Q'eqchi'
         function traducirEspañolAQuechí() {
@@ -201,10 +220,6 @@
                     document.getElementById("textoQeqchi").value = data.qeqchiText;
                     document.getElementById("audioes").textContent=data.audio_es;
                     document.getElementById("audioqe").textContent=data.audio_qeq;
-                    //audio_espaniol=data.audio_es;
-                    //audio_qeqchi=data.audio_qeq;
-                    //console.log('Audio en español'+audio_espaniol);
-                    //console.log('Audio en qeqchi'+audio_qeqchi);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -231,10 +246,9 @@
                     console.error('Error:', error);
                 });
         }
-
-        // Script para cambiar el modo claro a oscuro
-        /*
-        const darkModeToggle = document.getElementById("dark-mode-toggle");
+        
+        // Script para cambiar el modo oscuro
+        const darkModeToggle = document.getElementById("darkModeToggle");
         const body = document.body;
 
         darkModeToggle.addEventListener("change", function () {
@@ -244,7 +258,7 @@
                 body.classList.remove("dark-mode");
             }
         });
-        */
+
     </script>
 
 </body>
