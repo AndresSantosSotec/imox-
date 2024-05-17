@@ -22,7 +22,8 @@
             position: fixed;
             top: 0;
             bottom: 0;
-            left: -300px; /* Oculta inicialmente el historial */
+            left: -300px;
+            /* Oculta inicialmente el historial */
             width: 300px;
             background-color: #f8f9fa;
             transition: left 0.3s ease;
@@ -79,7 +80,8 @@
                             </div>
                             <textarea id="textoEspañol" class="form-control border-left-0" rows="4"
                                 placeholder="Ingresa un texto en español"></textarea>
-                            <button class="btn btn-secondary" onclick="reproducirAudio('español')">
+                            <button class="btn btn-secondary"
+                                onclick="reproducirTexto(document.getElementById('textoEspañol').value)">
                                 <i class="fas fa-volume-up"></i>
                             </button>
                         </div>
@@ -90,7 +92,8 @@
                             </div>
                             <textarea id="textoQeqchi" class="form-control border-left-0" rows="4"
                                 placeholder="Traducción en q'eqchi'"></textarea>
-                            <button class="btn btn-secondary" onclick="reproducirAudio('qeqchi')">
+                            <button class="btn btn-secondary"
+                                onclick="reproducirTexto(document.getElementById('textoQeqchi').value)">
                                 <i class="fas fa-volume-up"></i>
                             </button>
                         </div>
@@ -177,21 +180,43 @@
             inputQeqchi.value = "";
         }
 
-        // Función para reproducir audio
+        
+        /*// Función para reproducir audio version de Juan
         function reproducirAudio(idioma) {
             // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
-            let audio_palabraes= document.getElementById("audioes").textContent;
-            let audio_palabraqe= document.getElementById("audioqe").textContent;
+            let audio_palabraes = document.getElementById("audioes").textContent;
+            let audio_palabraqe = document.getElementById("audioqe").textContent;
             //Crear instancia de Audio para los dos idiomas
-        
+
             let sonido_espaniol = new Audio(audio_palabraes);
             let sonido_qeqchi = new Audio(audio_palabraqe);
-           
-            
-            if(idioma=="español"){
+
+
+            if (idioma == "español") {
                 sonido_espaniol.play();
-            }else if(idioma=="qeqchi"){
+            } else if (idioma == "qeqchi") {
                 sonido_qeqchi.play();
+            }
+        }
+        */
+
+
+        //reporducir audio con js
+
+        function reproducirTexto(texto) {
+            // Verificar si la API de síntesis de voz es compatible con el navegador
+            if ('speechSynthesis' in window) {
+                var synthesis = window.speechSynthesis;
+                var utterance = new SpeechSynthesisUtterance(texto);
+
+                // Configurar el idioma del texto a reproducir
+                utterance.lang = españolActivo ? 'es' : 'qeq'; // Ajusta según los códigos de idioma adecuados
+
+                // Reproducir el texto en voz
+                synthesis.speak(utterance);
+            } else {
+                // La API de síntesis de voz no es compatible con el navegador
+                alert('Tu navegador no soporta la síntesis de voz.');
             }
         }
 
@@ -212,14 +237,14 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: `textoEspañol=${encodeURIComponent(textoEspañol)}`,
-                        
+
             })
                 .then(response => response.json())
                 .then(data => {
                     //Asignar los valores obtenidos como respuesta de la API (traducción y audios)
                     document.getElementById("textoQeqchi").value = data.qeqchiText;
-                    document.getElementById("audioes").textContent=data.audio_es;
-                    document.getElementById("audioqe").textContent=data.audio_qeq;
+                    document.getElementById("audioes").textContent = data.audio_es;
+                    document.getElementById("audioqe").textContent = data.audio_qeq;
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -246,7 +271,7 @@
                     console.error('Error:', error);
                 });
         }
-        
+
         // Script para cambiar el modo oscuro
         const darkModeToggle = document.getElementById("darkModeToggle");
         const body = document.body;

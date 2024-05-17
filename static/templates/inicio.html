@@ -10,7 +10,7 @@
     <!-- Estilos específicos del segundo código -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-   
+
 
     <title>Portfolio</title>
 
@@ -20,7 +20,8 @@
             position: fixed;
             top: 0;
             bottom: 0;
-            left: -300px; /* Oculta inicialmente el historial */
+            left: -300px;
+            /* Oculta inicialmente el historial */
             width: 300px;
             background-color: #f8f9fa;
             transition: left 0.3s ease;
@@ -71,21 +72,27 @@
                 <div class="card p-3">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text bg-white border-right-0" id="inputGroup-sizing-default">Español</span>
+                            <span class="input-group-text bg-white border-right-0"
+                                id="inputGroup-sizing-default">Español</span>
                         </div>
-                        <textarea id="textoEspañol" class="form-control border-left-0" rows="4" placeholder="Ingresa un texto en español"></textarea>
-                        <button class="btn btn-secondary" onclick="reproducirAudio('español')">
+                        <textarea id="textoEspañol" class="form-control border-left-0" rows="4"
+                            placeholder="Ingresa un texto en español"></textarea>
+                        <button class="btn btn-secondary"
+                            onclick="reproducirTexto(document.getElementById('textoEspañol').value)">
                             <i class="fas fa-volume-up"></i>
                         </button>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text bg-white border-right-0" id="inputGroup-sizing-default">Q'eqchi'</span>
+                            <span class="input-group-text bg-white border-right-0"
+                                id="inputGroup-sizing-default">Q'eqchi'</span>
                         </div>
-                        <textarea id="textoQeqchi" class="form-control border-left-0" rows="4" placeholder="Traducción en q'eqchi'"></textarea>
-                        <button class="btn btn-secondary" onclick="reproducirAudio('qeqchi')">
+                        <textarea id="textoQeqchi" class="form-control border-left-0" rows="4"
+                            placeholder="Traducción en q'eqchi'"></textarea>
+                        <button class="btn btn-secondary"
+                            onclick="reproducirTexto(document.getElementById('textoQeqchi').value)">
                             <i class="fas fa-volume-up"></i>
-                        </button>
+                        </button>>
                     </div>
                     <div class="text-center">
                         <button class="btn btn-primary" onclick="traducirEspañolAQuechí()">Traducir Español a
@@ -124,6 +131,148 @@
             const historialContainer = document.querySelector('.historial-container');
             historialContainer.style.left = historialContainer.style.left === '0px' ? '-300px' : '0px';
         }
+
+        function reproducirTexto(texto) {
+            // Verificar si la API de síntesis de voz es compatible con el navegador
+            if ('speechSynthesis' in window) {
+                var synthesis = window.speechSynthesis;
+                var utterance = new SpeechSynthesisUtterance(texto);
+
+                // Configurar el idioma del texto a reproducir
+                utterance.lang = españolActivo ? 'es' : 'qeq'; // Ajusta según los códigos de idioma adecuados
+
+                // Reproducir el texto en voz
+                synthesis.speak(utterance);
+            } else {
+                // La API de síntesis de voz no es compatible con el navegador
+                alert('Tu navegador no soporta la síntesis de voz.');
+            }
+        }
+    </script>
+    <script>
+        let españolActivo = true;
+
+        function expandTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight + 10) + 'px';
+        }
+
+        function cambiarIdioma() {
+            const inputEspañol = document.getElementById("textoEspañol");
+            const inputQeqchi = document.getElementById("textoQeqchi");
+
+            españolActivo = !españolActivo;
+
+            if (españolActivo) {
+                inputEspañol.placeholder = "Ingresa un texto en español";
+                inputQeqchi.placeholder = "Traducción en q'eqchi'";
+                document.getElementById('inputGroup-sizing-default').textContent = 'Español';
+                document.getElementById('inputGroup-sizing-default-2').textContent = "Q'eqchi'";
+            } else {
+                inputEspañol.placeholder = "Ingresa un texto en q'eqchi'";
+                inputQeqchi.placeholder = "Traducción en español";
+                document.getElementById('inputGroup-sizing-default-2').textContent = "Español'";
+                document.getElementById('inputGroup-sizing-default').textContent = "Q'eqchi'";
+            }
+
+            inputEspañol.value = "";
+            inputQeqchi.value = "";
+        }
+
+        
+        /*// Función para reproducir audio version de Juan
+        function reproducirAudio(idioma) {
+            // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
+            let audio_palabraes = document.getElementById("audioes").textContent;
+            let audio_palabraqe = document.getElementById("audioqe").textContent;
+            //Crear instancia de Audio para los dos idiomas
+
+            let sonido_espaniol = new Audio(audio_palabraes);
+            let sonido_qeqchi = new Audio(audio_palabraqe);
+
+
+            if (idioma == "español") {
+                sonido_espaniol.play();
+            } else if (idioma == "qeqchi") {
+                sonido_qeqchi.play();
+            }
+        }
+        */
+
+
+        //reporducir audio con js
+
+        function reproducirTexto(texto) {
+            // Verificar si la API de síntesis de voz es compatible con el navegador
+            if ('speechSynthesis' in window) {
+                var synthesis = window.speechSynthesis;
+                var utterance = new SpeechSynthesisUtterance(texto);
+
+                // Configurar el idioma del texto a reproducir
+                utterance.lang = españolActivo ? 'es' : 'qeq'; // Ajusta según los códigos de idioma adecuados
+
+                // Reproducir el texto en voz
+                synthesis.speak(utterance);
+            } else {
+                // La API de síntesis de voz no es compatible con el navegador
+                alert('Tu navegador no soporta la síntesis de voz.');
+            }
+        }
+
+        // Función para mostrar/ocultar el historial
+        function toggleHistorial() {
+            const historialContainer = document.querySelector('.historial-container');
+            historialContainer.style.left = historialContainer.style.left === '0px' ? '-300px' : '0px';
+        }
+
+        // Función para traducir de Español a Q'eqchi'
+        function traducirEspañolAQuechí() {
+            const textoEspañol = document.getElementById("textoEspañol").value;
+
+            // Realizar la solicitud AJAX al servidor
+            fetch('/traducir', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `textoEspañol=${encodeURIComponent(textoEspañol)}`,
+
+            })
+                .then(response => response.json())
+                .then(data => {
+                    //Asignar los valores obtenidos como respuesta de la API (traducción y audios)
+                    document.getElementById("textoQeqchi").value = data.qeqchiText;
+                    document.getElementById("audioes").textContent = data.audio_es;
+                    document.getElementById("audioqe").textContent = data.audio_qeq;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Función para traducir de Q'eqchi' a Español
+        function traducirQuechíAEspañol() {
+            const textoQeqchi = document.getElementById("textoQeqchi").value;
+
+            // Realizar la solicitud AJAX al servidor
+            fetch('/traducir', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `textoEspañol=${encodeURIComponent(textoQeqchi)}`,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("textoEspañol").value = data.qeqchiText;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+
     </script>
 </body>
 
