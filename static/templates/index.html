@@ -1,294 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="html template">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="Asad">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imox traductor</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/assets/css/estilos.css">
-    <!-- Custom Dark Mode CSS -->
-    <link rel="stylesheet" href="/static/assets/css/dark-mode.css">
-    <!-- Boxicons CSS -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>template</title>
+    <link rel="stylesheet" href="/static/templates/agenci/css/all.min.css">
+    <link rel="stylesheet" href="/static/templates/agenci/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/templates/agenci/css/main.css">
 
-    <style>
-        /* Estilo para el contenedor del historial */
-        .historial-container {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: -300px;
-            /* Oculta inicialmente el historial */
-            width: 300px;
-            background-color: #f8f9fa;
-            transition: left 0.3s ease;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        /* Estilo para el botón de mostrar/ocultar historial */
-        .toggle-historial-btn {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1001;
-        }
-    </style>
 </head>
 
 <body>
-    <!-- Header del primer código -->
-    <header class="container">
-        <div class="page-header">
-            <div class="logo">
-            </div>
-            <input type="checkbox" id="click">
-            <label for="click" class="mainicon">
-                <div class="menu">
-                    <i class='bx bx-menu'></i>
-                </div>
-            </label>
-            <ul>
-                <li><a href="#" class="active" style="--navAni:1">Home</a></li>
-                <li><a href="#" style="--navAni:2">acerca de</a></li>
-                <li><a href="" style="--navAni:3">Servicios</a></li>
-                <li><a href="cargar_palabras.html" style="--navAni:4">Contacto</a></li>
-                <li><a href="login.html" style="--navAni:5">iniciar</a></li>
-            </ul>
-            <label class="mode">
-                <input type="checkbox" id="darkModeToggle">
-                <i class='bx bxs-moon'></i>
-            </label>
+
+    <!-- Cursor Animation -->
+    <div class="cursor1"></div>
+    <div class="cursor2"></div>
+
+
+    <!-- ==================== Start mobile menu ================= -->
+
+    <div class="zq_mobile_menu">
+        <div class="logo icon-img-100">
+            <img src="assets/images/logo/logo.png" alt="">
         </div>
-    </header>
-
-    <!-- Sección de Traducción similar al traductor de Google -->
-    <section id="translation" class="bg-light">
+        <div class="close-menu cursor-pointer ti-close"><i class="fa-sharp fa-light fa-xmark"></i></div>
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card p-3">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white border-right-0"
-                                    id="inputGroup-sizing-default">Español</span>
-                            </div>
-                            <textarea id="textoEspañol" class="form-control border-left-0" rows="4"
-                                placeholder="Ingresa un texto en español"></textarea>
-                            <button class="btn btn-secondary"
-                                onclick="reproducirTexto(document.getElementById('textoEspañol').value)">
-                                <i class="fas fa-volume-up"></i>
-                            </button>
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="menu-text">
+                        <div class="text">
+                            <h2>Menu</h2>
                         </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white border-right-0"
-                                    id="inputGroup-sizing-default-2">Q'eqchi'</span>
-                            </div>
-                            <textarea id="textoQeqchi" class="form-control border-left-0" rows="4"
-                                placeholder="Traducción en q'eqchi'"></textarea>
-                            <button class="btn btn-secondary"
-                                onclick="reproducirTexto(document.getElementById('textoQeqchi').value)">
-                                <i class="fas fa-volume-up"></i>
-                            </button>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-primary" onclick="traducirEspañolAQuechí()">Traducir Español a
-                                Q'eqchi'</button>
-                            <button class="btn btn-primary mx-2" onclick="cambiarIdioma()"><i
-                                    class="fas fa-exchange-alt"></i></button>
-                            <button class="btn btn-primary" onclick="traducirQuechíAEspañol()">Traducir Q'eqchi' a
-                                Español</button>
-
-                            <!--Prueba de las rutas de los audios-->
-                            <p id="audioes">Hola español</p>
-                            <p id="audioqe">Hola qeqchi</p>
-                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="menu-navbar">
+                        <ul class="main-menu">
+                            <li>
+                                <div class="overflow-hidden">
+                                    <a href="" class="link cursor-pointer dmenu"><span class="fill-text"
+                                            data-text="Home">Acerca de</span></a>
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="overflow-hidden">
+                                    <a href="#" class="link cursor-pointer dmenu"><span class="fill-text"
+                                            data-text="Products">Servicio</span> <i></i></a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="overflow-hidden">
+                                    <a href="" class="link cursor-pointer dmenu"><span class="fill-text"
+                                            data-text="Portfolio">Salir</span></a>
+                                </div>
+                            </li>                             
+                            <li>
+                                <div class="overflow-hidden">
+                                    <a href="" class="link cursor-pointer dmenu"><span class="fill-text"
+                                            data-text="Contact">Contact</span></a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Sección Acerca de -->
-    <section id="about">
-        <div class="container">
+    <!-- ==================== End Navbar ==================== -->
 
+    <div class="has-smooth" id="has_smooth"></div>
+
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+            <div class="body-wrapper pt-30">
+                <!-- Start Header area -->
+                <header class="zq_header-area">
+                    <div class="container container-custom-1">
+                        <div class="row align-items-center">
+                            <div class="col-xxl-9 col-lg-8 col-sm-6 col-8">
+                                <div class="zq_header-left">
+                                    <div class="zq_header-logo">
+                                        <a href=""><img src="assets/images/logo/logo.png" alt=""></a>
+                                    </div>
+                                    <div class="zq_header-menu">
+                                        <nav id="mobile-menu">
+                                            <ul>
+                                                <li class="menu-has-child">
+                                                    <a href="no_log.html">Traductor</a>
+                                                </li>
+                                                <li class="menu-has-child">
+                                                    <a href="#">Diccionario</a>
+                                                </li>
+                                               
+                                                <li class="menu-has-child">
+                                                    <a href="#">Aportes</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-3 col-lg-4 col-sm-6 col-4 d-flex justify-content-end">
+                                <div class="zq_header-right">
+                                    <a href="login.html" class="zq_header-btn">Login
+                                        <svg width="11" height="13" viewBox="0 0 11 11" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M1.57971 10.1668L9.55073 1.8335M9.55073 1.8335H2.37681M9.55073 1.8335V9.33349"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                    <span class="zq_header-menuIcon zq_menuIcon d-lg-none d-block"><i
+                                            class="fa-light fa-grid-2"></i></span>
+                                    <span class="zq_header-action-shape">
+                                        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                            class="w-11 h-11">
+                                            <path
+                                                d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <!-- end Header area -->
+                <main>
+                    <!-- hero area start -->
+                    <section class="zq_hero-area">
+                        <div class="container container-custom-1">
+                            <div class="zq_hero-container">
+                                <div class="zq_hero-wrap">
+                                    <div class="zq_hero-content">
+                                        <h1 class="zq_hero-content-title">
+                                            Traduce <span>Aprende</span> Aporta
+                                        </h1>
+                                        <p>El Traductor Imox es una innovadora herramienta digital diseñada para facilitar la traducción de lenguas mayas  
+                                            <br> Con el objetivo de preservar y promover la rica herencia lingüística y cultural de los pueblos mayas. </p>
+                                    </div>
+                                    <div class="zq_hero-img">
+                                        <img src="/static/templates/agenci/img/img-1.png" alt="">
+                                    </div>
+                                    <div class="zq_hero-circle-btn">
+                                        <img src="/static/templates/agenci/images/bg/h1_circle.png" alt="">
+                                        <a href="no_log.html">
+                                            <svg width="28" height="30" viewBox="0 0 28 30" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_129_42)">
+                                                    <path
+                                                        d="M13.8922 10.568C17.1308 7.32937 20.2842 4.17596 23.4376 1.02255C24.1195 0.34073 24.8013 -0.170634 25.824 0.0850478C27.6138 0.425957 28.2956 2.55664 27.0172 3.92028C25.3979 5.62482 23.7786 7.15891 22.1592 8.77823C20.0286 10.9089 17.9831 13.0396 15.8524 15.085C14.4888 16.4487 13.3808 16.4487 12.0172 15.085C8.35242 11.4203 4.60242 7.7555 0.937644 4.0055C-0.17031 2.89755 -0.255538 1.53391 0.76719 0.596411C1.78992 -0.341089 3.06833 -0.341089 4.17628 0.852093C7.07401 3.83505 10.057 6.818 13.0399 9.80096C13.2104 10.0566 13.5513 10.2271 13.8922 10.568Z"
+                                                        fill="currentColor" />
+                                                    <path
+                                                        d="M13.7217 24.5454C16.9603 21.3068 20.0285 18.2386 23.0115 15.1704C23.3524 14.8295 23.608 14.5738 23.949 14.3181C24.8865 13.6363 26.0796 13.7215 26.8467 14.5738C27.699 15.4261 27.7842 16.534 27.1024 17.4715C26.9319 17.7272 26.6762 17.9829 26.4205 18.1534C22.841 21.7329 19.2615 25.3124 15.7671 28.8068C14.3183 30.2556 13.2103 30.2556 11.7615 28.8068C8.18191 25.2272 4.51714 21.5624 0.937591 17.9829C0.255773 17.3011 -0.255591 16.534 0.0853179 15.5113C0.596682 13.7215 2.64214 13.2954 4.00577 14.659C6.98873 17.5568 9.88645 20.5397 12.8694 23.5227C13.2103 23.7784 13.3808 24.1193 13.7217 24.5454Z"
+                                                        fill="currentColor" />
+                                                </g>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- hero area end -->
+                </main>
+
+            </div>
         </div>
-    </section>
-
-    <!-- Sección Servicios -->
-    <section id="services">
-        <div class="container">
-
-        </div>
-    </section>
-
-    <!-- Sección Contacto -->
-    <section id="contact">
-        <div class="container">
-
-        </div>
-    </section>
-
-    <!-- Botón para mostrar/ocultar historial -->
-    <button class="btn btn-primary toggle-historial-btn" onclick="toggleHistorial()">
-        <i class="fas fa-history"></i>
-    </button>
-
-    <!-- Bootstrap JS (opcional, solo si necesitas funcionalidades de Bootstrap) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-
-    <!-- Custom JavaScript -->
-    <script>
-        let españolActivo = true;
-
-        function expandTextarea(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight + 10) + 'px';
-        }
-
-        function cambiarIdioma() {
-            const inputEspañol = document.getElementById("textoEspañol");
-            const inputQeqchi = document.getElementById("textoQeqchi");
-
-            españolActivo = !españolActivo;
-
-            if (españolActivo) {
-                inputEspañol.placeholder = "Ingresa un texto en español";
-                inputQeqchi.placeholder = "Traducción en q'eqchi'";
-                document.getElementById('inputGroup-sizing-default').textContent = 'Español';
-                document.getElementById('inputGroup-sizing-default-2').textContent = "Q'eqchi'";
-            } else {
-                inputEspañol.placeholder = "Ingresa un texto en q'eqchi'";
-                inputQeqchi.placeholder = "Traducción en español";
-                document.getElementById('inputGroup-sizing-default-2').textContent = "Español'";
-                document.getElementById('inputGroup-sizing-default').textContent = "Q'eqchi'";
-            }
-
-            inputEspañol.value = "";
-            inputQeqchi.value = "";
-        }
+    </div>
 
 
-        /*// Función para reproducir audio version de Juan
-        function reproducirAudio(idioma) {
-            // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
-            let audio_palabraes = document.getElementById("audioes").textContent;
-            let audio_palabraqe = document.getElementById("audioqe").textContent;
-            //Crear instancia de Audio para los dos idiomas
-
-            let sonido_espaniol = new Audio(audio_palabraes);
-            let sonido_qeqchi = new Audio(audio_palabraqe);
-
-
-            if (idioma == "español") {
-                sonido_espaniol.play();
-            } else if (idioma == "qeqchi") {
-                sonido_qeqchi.play();
-            }
-        }
-        */
-        //reporducir audio con js
-        function reproducirTexto(texto) {
-            // Verificar si la API de síntesis de voz es compatible con el navegador
-            if ('speechSynthesis' in window) {
-                var synthesis = window.speechSynthesis;
-                var utterance = new SpeechSynthesisUtterance(texto);
-
-                // Configurar el idioma del texto a reproducir
-                utterance.lang = españolActivo ? 'es' : 'qeq'; // Ajusta según los códigos de idioma adecuados
-
-                // Reproducir el texto en voz
-                synthesis.speak(utterance);
-            } else {
-                // La API de síntesis de voz no es compatible con el navegador
-                alert('Tu navegador no soporta la síntesis de voz.');
-            }
-        }
-
-        // Función para mostrar/ocultar el historial
-        function toggleHistorial() {
-            const historialContainer = document.querySelector('.historial-container');
-            historialContainer.style.left = historialContainer.style.left === '0px' ? '-300px' : '0px';
-        }
-
-        // Función para traducir de Español a Q'eqchi'
-        function traducirEspañolAQuechí() {
-            const textoEspañol = document.getElementById("textoEspañol").value;
-
-            // Realizar la solicitud AJAX al servidor
-            fetch('/traducir', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `textoEspañol=${encodeURIComponent(textoEspañol)}`,
-
-            })
-                .then(response => response.json())
-                .then(data => {
-                    //Asignar los valores obtenidos como respuesta de la API (traducción y audios)
-                    document.getElementById("textoQeqchi").value = data.qeqchiText;
-                    document.getElementById("audioes").textContent = data.audio_es;
-                    document.getElementById("audioqe").textContent = data.audio_qeq;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function traducirQuechíAEspañol() {
-            const textoQeqchi = document.getElementById("textoQeqchi").value;
-
-            // Realizar la solicitud AJAX al servidor
-            fetch('/traducir', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `textoQeqchi=${encodeURIComponent(textoQeqchi)}`,
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("No se encontró una traducción para el texto proporcionado");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById("textoEspañol").value = data.spanishText;
-                    document.getElementById("audioes").textContent = data.audio_es;
-                    document.getElementById("audioqe").textContent = data.audio_qeq;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        // Script para cambiar el modo oscuro
-        const darkModeToggle = document.getElementById("darkModeToggle");
-        const body = document.body;
-
-        darkModeToggle.addEventListener("change", function () {
-            if (this.checked) {
-                body.classList.add("dark-mode");
-            } else {
-                body.classList.remove("dark-mode");
-            }
-        });
-
-    </script>
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/gsap.min.js"></script>
+    <script src="assets/js/ScrollSmoother.min.js"></script>
+    <script src="assets/js/ScrollTrigger.min.js"></script>
+    <script src="assets/js/SplitText.min.js"></script>
+    <script src="assets/js/jquery.meanmenu.min.js"></script>
+    <script src="assets/js/jquery.nice-select.min.js"></script>
+    <script src="assets/js/swiper-bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
 
 </body>
-
 </html>
