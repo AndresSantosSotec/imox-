@@ -180,7 +180,7 @@
             inputQeqchi.value = "";
         }
 
-        
+
         /*// Función para reproducir audio version de Juan
         function reproducirAudio(idioma) {
             // Aquí debes agregar la lógica para reproducir el audio asociado al texto en el idioma correspondiente
@@ -199,10 +199,7 @@
             }
         }
         */
-
-
         //reporducir audio con js
-
         function reproducirTexto(texto) {
             // Verificar si la API de síntesis de voz es compatible con el navegador
             if ('speechSynthesis' in window) {
@@ -251,7 +248,6 @@
                 });
         }
 
-        // Función para traducir de Q'eqchi' a Español
         function traducirQuechíAEspañol() {
             const textoQeqchi = document.getElementById("textoQeqchi").value;
 
@@ -261,11 +257,18 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `textoEspañol=${encodeURIComponent(textoQeqchi)}`,
+                body: `textoQeqchi=${encodeURIComponent(textoQeqchi)}`,
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("No se encontró una traducción para el texto proporcionado");
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    document.getElementById("textoEspañol").value = data.qeqchiText;
+                    document.getElementById("textoEspañol").value = data.spanishText;
+                    document.getElementById("audioes").textContent = data.audio_es;
+                    document.getElementById("audioqe").textContent = data.audio_qeq;
                 })
                 .catch(error => {
                     console.error('Error:', error);
