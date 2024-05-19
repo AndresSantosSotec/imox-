@@ -26,6 +26,8 @@ func main() {
 		http.Redirect(w, r, "/static/templates/index.html", http.StatusFound)
 	})
 
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Manejador para la página de inicio de sesión (login.html)
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		// Definir la variable db
@@ -76,6 +78,8 @@ func main() {
 		}
 	})
 
+	//////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Manejador para la página de traducción
 	http.HandleFunc("/traducir", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -83,14 +87,16 @@ func main() {
 			return
 		}
 
-		// Parsear el texto en español desde la solicitud AJAX
+		// Parsear el texto desde la solicitud AJAX
 		if err := r.ParseForm(); err != nil {
 			http.Error(w, "Error al parsear la solicitud", http.StatusBadRequest)
 			return
 		}
-		spanishText := r.FormValue("textoEspañol")
 
-		// Realizar la consulta a la base de datos
+		spanishText := r.FormValue("textoEspañol")
+		qeqchiText := r.FormValue("textoQeqchi")
+
+		// Realizar la conexión a la base de datos
 		db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/imox_bd")
 		if err != nil {
 			http.Error(w, "Error de conexión a la base de datos", http.StatusInternalServerError)
@@ -99,11 +105,25 @@ func main() {
 		}
 		defer db.Close()
 
-		var qeqchiText string
-		err = db.QueryRow("SELECT palabra_qeqchi FROM traducciones WHERE palabra_esp = ?", spanishText).Scan(&qeqchiText)
+		var response struct {
+			SpanishText string `json:"spanishText"`
+			QeqchiText  string `json:"qeqchiText"`
+			AudioES     string `json:"audio_es"`
+			AudioQeq    string `json:"audio_qeq"`
+		}
+
+		// Si se proporciona texto en español, traducir a Q'eqchi'
+		if spanishText != "" {
+			err = db.QueryRow("SELECT palabra_qeqchi, audio_esp, audio_qeqchi FROM traducciones WHERE palabra_esp = ?", spanishText).Scan(&response.QeqchiText, &response.AudioES, &response.AudioQeq)
+			response.SpanishText = spanishText
+		} else if qeqchiText != "" { // Si se proporciona texto en Q'eqchi', traducir a Español
+			err = db.QueryRow("SELECT palabra_esp, audio_esp, audio_qeqchi FROM traducciones WHERE palabra_qeqchi = ?", qeqchiText).Scan(&response.SpanishText, &response.AudioES, &response.AudioQeq)
+			response.QeqchiText = qeqchiText
+		}
+
 		if err != nil {
 			if err == sql.ErrNoRows {
-				http.Error(w, fmt.Sprintf("No se encontró una traducción para el texto en español: %s", spanishText), http.StatusNotFound)
+				http.Error(w, "No se encontró una traducción para el texto proporcionado", http.StatusNotFound)
 			} else {
 				http.Error(w, "Error al consultar la base de datos", http.StatusInternalServerError)
 				log.Println("Error al consultar la base de datos:", err)
@@ -112,11 +132,6 @@ func main() {
 		}
 
 		// Enviar la traducción como respuesta
-		response := struct {
-			QeqchiText string `json:"qeqchiText"`
-		}{
-			QeqchiText: qeqchiText,
-		}
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(response); err != nil {
 			http.Error(w, "Error al codificar la respuesta JSON", http.StatusInternalServerError)
@@ -124,6 +139,8 @@ func main() {
 			return
 		}
 	})
+
+	///////////////////////////////////////////////////////////////////////////////////////////
 
 	// Manejador para la página de registro
 	http.HandleFunc("/registro", handleRegistro)
